@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Fishing Countdown</title>
+    <style>
+        @font-face {
+            font-family: 'Digital7';
+            src: url(digital-7.ttf) format(truetype);
+        }
+
+        body {
+            font-family: 'Lucida Console', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(background.png);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 300px);
+            grid-template-rows: repeat(2, 300px);
+            gap: 40px;
+            padding: 10px;
+        }
+
+        .timer-box {
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-number {
+            font-family: 'Digital7', sans-serif;
+            font-size: 40px;
+            color: white;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+
+        .timer {
+            font-family: 'Digital7', sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: whitesmoke;
+            letter-spacing: 3px;
+            margin: 20px;
+        }
+
+        .default-time {
+            background-color: #D9A748;
+            color: white;
+            border: none;
+            font-size: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(95, 175, 125, 0.5);
+            padding: 6px 10px;
+            font-family: 'Lucida Console', monospace;
+        }
+
+        .start {
+            background-color: #5FAF7D;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(95, 175, 125, 0.5);
+            font-family: 'Lucida Console', monospace;
+            text-transform: uppercase;
+        }
+
+        .stop {
+            background-color: #C67575;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(198, 117, 117, 0.5);
+            font-family: 'Lucida Console', monospace;
+            text-transform: uppercase;
+        }
+
+        .reset {
+            background-color: #D9A748;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(217, 167, 72, 0.5);
+            font-family: 'Lucida Console', monospace;
+            text-transform: uppercase;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            font-size: 16px;
+            width: 55px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(217, 167, 72, 0.5);
+            font-family: 'Lucida Console', monospace;
+            
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            padding: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button-container button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .preset-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="timer-box">
+            <div class="timer-number">1</div>
+            <div>
+                <div class="timer" id="timer1">00:00</div>
+                <input type="number" id="hour1" min="0" placeholder="h" />
+                <input type="number" id="minute1" min="0" placeholder="min" />
+            </div>
+            <div class="button-container">
+                <button class="start" id="start1" onclick="startCountdown(1)">Start</button>
+                <button class="stop" id="stop1" onclick="stopCountdown(1)" disabled>Stop</button>
+                <button class="reset" id="reset1" onclick="resetCountdown(1)" disabled>Reset</button>
+            </div>
+            <div class="preset-buttons">
+                <button class="default-time" onclick="presetTime(1, 0.5)">30min</button>
+                <button class="default-time" onclick="presetTime(1, 1)">1h</button>
+                <button class="default-time" onclick="presetTime(1, 1.5)">1h 30min</button>
+                <button class="default-time" onclick="presetTime(1, 2)">2h</button>
+            </div>
+        </div>
+
+        <div class="timer-box">
+            <div class="timer-number">2</div> <!-- Numărul în colțul din stânga -->
+            <div>
+                <div class="timer" id="timer2">00:00</div>
+                <input type="number" id="hour2" min="0" placeholder="h" />
+                <input type="number" id="minute2" min="0" placeholder="min" />
+            </div>
+            <div class="button-container">
+                <button class="start" id="start2" onclick="startCountdown(2)">Start</button>
+                <button class="stop" id="stop2" onclick="stopCountdown(2)" disabled>Stop</button>
+                <button class="reset" id="reset2" onclick="resetCountdown(2)" disabled>Reset</button>
+            </div>
+            <div class="preset-buttons">
+                <button class="default-time" onclick="presetTime(2, 0.5)">30min</button>
+                <button class="default-time" onclick="presetTime(2, 1)">1h</button>
+                <button class="default-time" onclick="presetTime(2, 1.5)">1h 30min</button>
+                <button class="default-time" onclick="presetTime(2, 2)">2h</button>
+            </div>
+        </div>
+
+        <div class="timer-box">
+            <div class="timer-number">3</div> <!-- Numărul în colțul din stânga -->
+            <div>
+                <div class="timer" id="timer3">00:00</div>
+                <input type="number" id="hour3" min="0" placeholder="h" />
+                <input type="number" id="minute3" min="0" placeholder="min" />
+            </div>
+            <div class="button-container">
+                <button class="start" id="start3" onclick="startCountdown(3)">Start</button>
+                <button class="stop" id="stop3" onclick="stopCountdown(3)" disabled>Stop</button>
+                <button class="reset" id="reset3" onclick="resetCountdown(3)" disabled>Reset</button>
+            </div>
+            <div class="preset-buttons">
+                <button class="default-time" onclick="presetTime(3, 0.5)">30min</button>
+                <button class="default-time" onclick="presetTime(3, 1)">1h</button>
+                <button class="default-time" onclick="presetTime(3, 1.5)">1h 30min</button>
+                <button class="default-time" onclick="presetTime(3, 2)">2h</button>
+            </div>
+        </div>
+
+        <div class="timer-box">
+            <div class="timer-number">4</div> <!-- Numărul în colțul din stânga -->
+            <div>
+                <div class="timer" id="timer4">00:00</div>
+                <input type="number" id="hour4" min="0" placeholder="h" />
+                <input type="number" id="minute4" min="0" placeholder="min" />
+            </div>
+            <div class="button-container">
+                <button class="start" id="start4" onclick="startCountdown(4)">Start</button>
+                <button class="stop" id="stop4" onclick="stopCountdown(4)" disabled>Stop</button>
+                <button class="reset" id="reset4" onclick="resetCountdown(4)" disabled>Reset</button>
+            </div>
+            <div class="preset-buttons">
+                <button class="default-time" onclick="presetTime(4, 0.5)">30min</button>
+                <button class="default-time" onclick="presetTime(4, 1)">1h</button>
+                <button class="default-time" onclick="presetTime(4, 1.5)">1h 30min</button>
+                <button class="default-time" onclick="presetTime(4, 2)">2h</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timers = [null, null, null, null];  // Timerele pentru fiecare casetă
+        let countdowns = [null, null, null, null];  // Intervalurile pentru fiecare timer
+        let isRunning = [false, false, false, false];  // Starea fiecărui timer (pornit sau oprit)
+
+        function startCountdown(timerId) {
+            const hourInput = document.getElementById(`hour${timerId}`);
+            const minuteInput = document.getElementById(`minute${timerId}`);
+            const timerElement = document.getElementById(`timer${timerId}`);
+            const startButton = document.getElementById(`start${timerId}`);
+            const stopButton = document.getElementById(`stop${timerId}`);
+            const resetButton = document.getElementById(`reset${timerId}`);
+
+            const hours = parseInt(hourInput.value) || 0;
+            const minutes = parseInt(minuteInput.value) || 0;
+            let totalTime = hours * 3600 + minutes * 60;  // Conversia timpului în secunde
+
+            if (totalTime <= 0) {
+                alert("Te rog să setezi un timp valid.");
+                return;
+            }
+
+            if (countdowns[timerId - 1]) {
+                clearInterval(countdowns[timerId - 1]);  // Opriți timerul existent
+            }
+
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            resetButton.disabled = false;
+            isRunning[timerId - 1] = true;
+
+            countdowns[timerId - 1] = setInterval(function () {
+                totalTime--;
+
+                if (totalTime <= 0) {
+                    clearInterval(countdowns[timerId - 1]);
+                    timerElement.textContent = "00:00";
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                    resetButton.disabled = true;
+                    isRunning[timerId - 1] = false;
+                } else {
+                    let hoursLeft = Math.floor(totalTime / 3600);
+                    let minutesLeft = Math.floor((totalTime % 3600) / 60);
+                    let secondsLeft = totalTime % 60;
+
+                    timerElement.textContent = `${String(hoursLeft).padStart(2, '0')}:${String(minutesLeft).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function stopCountdown(timerId) {
+            clearInterval(countdowns[timerId - 1]);
+            isRunning[timerId - 1] = false;
+            document.getElementById(`start${timerId}`).disabled = false;
+            document.getElementById(`stop${timerId}`).disabled = true;
+        }
+
+        function resetCountdown(timerId) {
+            clearInterval(countdowns[timerId - 1]);
+            isRunning[timerId - 1] = false;
+
+            document.getElementById(`hour${timerId}`).value = '';
+            document.getElementById(`minute${timerId}`).value = '';
+            document.getElementById(`timer${timerId}`).textContent = '00:00';
+
+            document.getElementById(`start${timerId}`).disabled = false;
+            document.getElementById(`stop${timerId}`).disabled = true;
+            document.getElementById(`reset${timerId}`).disabled = true;
+        }
+
+        function presetTime(timerId, hours) {
+            const hourInput = document.getElementById(`hour${timerId}`);
+            const minuteInput = document.getElementById(`minute${timerId}`);
+
+            const minutes = Math.floor(hours * 60);
+            hourInput.value = Math.floor(hours);
+            minuteInput.value = minutes % 60;
+
+            startCountdown(timerId);
+        }
+    </script>
+
+</body>
+
+</html>
